@@ -14,13 +14,13 @@ public class GUI {
 	private JMenu menuFile, menuEdit, menuAbout;
 	private JMenuItem itemOpen, itemNew, itemSave, itemClose;
 	private JMenuItem itemCut, itemCopy, itemPaste, itemSelect;
-	private JPanel contentPanel, buttonsPanel;
-    private JLabel message;
-    private int guiWidth, guiHeight;
-    
-    JFileChooser fileChooser;
-    
-    private ImagePanel picturePanel;
+	private JPanel buttonsPanel;
+	private JLabel message;
+	private JFileChooser fileChooser;
+	
+	private ImagePanel picturePanel;
+	
+	private int guiWidth, guiHeight;
 	
 	public GUI(String name, int width, int height) {
 		
@@ -32,7 +32,7 @@ public class GUI {
 		
 		// Create an app window, called "frame" in Java
 		mainWindow = new JFrame(name);
-//		mainWindow.setLayout(new GridLayout(1, 2)); // if needed
+		// mainWindow.setLayout(new GridLayout(1, 2)); // if needed
 		mainWindow.setSize(width + width/2, height);
 		mainWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		// Without the last one, the window closes but the application stays active!
@@ -87,28 +87,26 @@ public class GUI {
 		// Don't forget about the menu button without items
 		menuAbout.addMenuListener(new EmptyMenuListener());
 		
-        // Function buttons
-        buttonsPanel = new JPanel();
-//        buttonsPanel.setBackground(Color.red);
-        buttonsPanel.setBounds(0, 0, width/2, height);
-//        buttonsPanel.setLayout(new GridLayout(4, 1));
-        JButton but1 = new JButton("but1");
-        JButton but2 = new JButton("but2");
-        JButton but3 = new JButton("but3");
-        JButton but4 = new JButton("but4");
-        buttonsPanel.add(but1);
-        buttonsPanel.add(but2);
-        buttonsPanel.add(but3);
-        buttonsPanel.add(but4);
-		
+	        // Function buttons
+	        buttonsPanel = new JPanel();
+	        buttonsPanel.setBounds(0, 0, width/2, height);
+		// buttonsPanel.setLayout(new GridLayout(4, 1));
+	        JButton but1 = new JButton("but1");
+	        JButton but2 = new JButton("but2");
+	        JButton but3 = new JButton("but3");
+	        JButton but4 = new JButton("but4");
+	        buttonsPanel.add(but1);
+	        buttonsPanel.add(but2);
+	        buttonsPanel.add(but3);
+	        buttonsPanel.add(but4);
+			
 		// The actual content panel
 		picturePanel = new ImagePanel();
-//		picturePanel.setBackground(Color.blue);
 		picturePanel.setBounds(width/2, 0, width, height);
 		message = new JLabel("content window message");
 		picturePanel.add(message);
-        
-        // put it all together
+	        
+	        // put it all together
 		mainWindow.add(menuBar);
 		mainWindow.add(buttonsPanel);
 		mainWindow.add(picturePanel);
@@ -117,29 +115,35 @@ public class GUI {
 		mainWindow.setVisible(true);
 		
 		fileChooser = new JFileChooser();
-	    fileChooser.setFileFilter(new FileNameExtensionFilter("Image files (jpg, png ...)", "jpg", "jpeg", "png", "gif", "bmp"));
-	    fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Image files (jpg, png ...)", "jpg", "jpeg", "png", "gif", "bmp"));
+		fileChooser.setAcceptAllFileFilterUsed(false);
 	}
 	
 	private void showText(String text) {
 		message.setText("menu item \"" + text + "\" clicked.");
 	}
 	
+	/**
+ 	* Opens a file picker dialog and handles the selection accordingly.
+  	*/
 	private void openFile() {
-
-        switch (fileChooser.showOpenDialog(null)) {
-		case JFileChooser.APPROVE_OPTION:
-			picturePanel.setImage(fileChooser.getSelectedFile());
-			mainWindow.repaint();
-			break;
-		case JFileChooser.CANCEL_OPTION:
-			System.out.println("Opening canceled");
-			break;
-		case JFileChooser.ERROR_OPTION:
-			System.out.println("error");
-		}
+		
+	        switch (fileChooser.showOpenDialog(null)) {
+			case JFileChooser.APPROVE_OPTION:
+				picturePanel.setImage(fileChooser.getSelectedFile());
+				mainWindow.repaint(); // display the change
+				break;
+			case JFileChooser.CANCEL_OPTION:
+				System.out.println("Opening canceled");
+				break;
+			case JFileChooser.ERROR_OPTION:
+				System.out.println("error");
+			}
 	}
-	
+
+	/**
+ 	* Opens a file picker dialog and handles the saving process accordingly.
+  	*/
 	private void saveFile() {
         switch (fileChooser.showSaveDialog(null)) {
 		case JFileChooser.APPROVE_OPTION:
@@ -167,18 +171,18 @@ public class GUI {
 
 	    @Override
 	    public void menuSelected(MenuEvent e) {
-	    	JFrame about = new JFrame("About Window");
-	    	about.setSize(160, 120);
+		    JFrame about = new JFrame("About Window");
+		    about.setSize(guiWidth/4, guiHeight/4);
 
-            JPanel stuff = new JPanel();
-            stuff.setBounds(0, 0, 160, 120);
-            
-            JLabel text = new JLabel("About Window");
-            stuff.add(text);
-            
-            about.add(stuff);
-            about.setLocationRelativeTo(null);
-            about.setVisible(true);
+	            JPanel stuff = new JPanel();
+	            stuff.setSize(guiWidth/4, guiHeight/4);
+	            
+	            JLabel text = new JLabel("About Window");
+	            stuff.add(text);
+	            
+	            about.add(stuff);
+	            about.setLocationRelativeTo(null);
+	            about.setVisible(true);
 	    }
 
 	    @Override
@@ -195,27 +199,26 @@ public class GUI {
 	 * accoding to <a href="#{@link}">{@link https://www.w3docs.com/snippets/java/how-to-add-an-image-to-a-jpanel.html}</a>
 	 */
 	private class ImagePanel extends JPanel {
-		
 		private BufferedImage image;
 
 		public BufferedImage getImage() {
-            return image;
-        }
+            		return image;
+		}
 		
 		public void setImage(File file) {
-            try {
-                image = ImageIO.read(file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-	    @Override
-	    protected void paintComponent(Graphics g) {
-	        super.paintComponent(g);
-	        if (image != null) {
-	            g.drawImage(image, guiWidth/2, 0, this.getWidth()-guiWidth/2, this.getHeight(), this);
+	            try {
+	                image = ImageIO.read(file);
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
 	        }
-	    }
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+		        if (image != null) {
+				// The drawn image needs an offset because of the tool box
+		            g.drawImage(image, guiWidth/2, 0, this.getWidth()-guiWidth/2, this.getHeight(), this);
+		        }
+		}
 	}
 }
