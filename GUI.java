@@ -147,8 +147,13 @@ public class GUI {
 			try {
 				// https://stackoverflow.com/a/21974043
 				String name = fileChooser.getSelectedFile().getName();
-				String extension = name.substring(name.lastIndexOf("."));
-				ImageIO.write(picturePanel.getImage(), extension, fileChooser.getSelectedFile());
+				int pos = name.lastIndexOf(".");
+				if (pos != -1) {
+					String extension = name.substring(pos+1);
+					ImageIO.write(picturePanel.getImage(), extension, fileChooser.getSelectedFile());
+				} else {
+					ImageIO.write(picturePanel.getImage(), "png", fileChooser.getSelectedFile());
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
