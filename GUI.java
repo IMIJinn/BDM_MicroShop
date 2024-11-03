@@ -61,7 +61,7 @@ public class GUI {
 		itemOpen.addActionListener(event -> openFile());
 		itemNew.addActionListener(event -> newFile());
 		itemSave.addActionListener(event -> saveFile());
-		itemClose.addActionListener(event -> closeFile());
+		itemClose.addActionListener(event -> picturePanel.clearImage());
 
 		// Add items to the "edit" menu
 		menuFile.add(itemOpen);
@@ -131,7 +131,6 @@ public class GUI {
 		switch (fileChooser.showOpenDialog(null)) {
 		case JFileChooser.APPROVE_OPTION:
 			picturePanel.setImage(fileChooser.getSelectedFile());
-			mainWindow.repaint();
 			break;
 		case JFileChooser.CANCEL_OPTION:
 			System.out.println("Opening canceled");
@@ -175,16 +174,6 @@ public class GUI {
 		Arrays.fill(imageData, 0xffffffff); // fill the whole array with white
 		newImage.setRGB(0, 0, guiWidth, guiHeight, imageData, 0, 0); // set the data
 		picturePanel.setImage(newImage);
-		mainWindow.repaint();
-	}
-
-	/**
-	 * Pretends to close the current file. It actually just sets the JPanel content
-	 * to a blank image.
-	 */
-	private void closeFile() {
-		picturePanel.clearImage();
-		mainWindow.repaint();
 	}
 
 	/**
@@ -253,6 +242,7 @@ public class GUI {
 			super.paintComponent(g);
 			if (image != null) {
 				g.drawImage(image, guiWidth / 2, 0, this.getWidth() - guiWidth / 2, this.getHeight(), this);
+				mainWindow.repaint();
 			}
 		}
 	}
