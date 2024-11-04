@@ -21,9 +21,7 @@ public class ValueWindow extends JFrame {
 
 		jSliderBrightness = makeTitledSilder("Brightness: 0.0", 0, 200, 0);
 		panel.add(jSliderBrightness);
-		panel.add(jSliderSaturation);
-		panel.add(jSliderContrast);
-		panel.add(jSliderHue);
+		// Add your sliders here
 
 		valueWindow.add(panel);
 		valueWindow.setVisible(true);
